@@ -1,0 +1,232 @@
+body {
+    background-color: #5f3e12;
+}
+
+.imagenes{
+    z-index: -1;
+    position: absolute;
+}
+
+#cpuImagen{
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    left: 0px;
+
+}
+
+#monitorImagen{
+    width: 600px;
+    left: 635px;
+    position: absolute;
+}
+
+#impresoraImagen{
+    width: 500px;
+    top: 450px;
+    left: 630px;
+    position: absolute;  
+}
+
+#text{
+    position: relative;
+    background-color: #bae5f0e3;
+    color: #030704;
+    font-size: 30px;
+    left: 0px;
+    top: 10px;
+} 
+
+
+/* ------------------------------------------- */
+
+#cardMuestraMemoria{
+    overflow-x:auto;
+    white-space: nowrap;
+    overflow-y: auto;
+    background-color: #ffffff;
+    width: 300px;
+    left: 1250px;
+    height: 900px;
+    font-size: 18px;
+    position: absolute;
+    
+}
+
+#cardMuestraMemoria::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#cardMuestraMemoria::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 10px;
+}
+
+#cardMuestraMemoria::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#cardFile{
+    overflow-x:auto;
+    white-space: nowrap;
+    overflow-y: auto;
+    background-color: #ffffff;
+    width: 300px;
+    height: 600px;
+    top: 420px;
+    left: 0px;
+    font-size: 16px;
+    position: absolute;
+}
+
+#cardFile::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#cardFile::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 10px;
+}
+
+#cardFile::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+
+#cardVariables{
+    background-color: #ffffff;
+    overflow-x:auto;
+    white-space: nowrap;
+    width: 300px;
+    height: 300px;
+    left: 300px;
+    top: 420px;
+    font-size: 20px;
+    position: absolute;
+}
+
+#cardVariables::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#cardVariables::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 10px;
+}
+
+#cardVariables::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#cardEtiquetas{
+    background-color: #ffffff;
+    overflow-x:auto;
+    white-space: nowrap;
+    width: 300px;
+    left: 300px;
+    height: 300px;
+    top: 720px;
+    font-size: 20px;
+    position: absolute;
+}
+
+#cardEtiquetas::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#cardEtiquetas::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 10px;
+}
+
+#cardEtiquetas::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+#cardScreen{
+    background-color: #0a0101fd;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 18px;
+    top: 120px;
+    left: 652px;
+    width: 565px;
+    height: 320px;
+    position: absolute;
+}
+
+#cardScreen::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+
+#cardScreen::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 5px;
+}
+
+#cardScreen::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+#cardImpresora{
+    background-color: #ffffff;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 18px;
+    top: 700px;
+    left: 700px;
+    width: 340px;
+    height: 320px;
+    position: absolute;
+}
+
+#cardImpresora::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+}
+
+#cardImpresora::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 5px;
+}
+
+#cardImpresora::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+}
+
+/* ------------------------------------------- */
+
+#textProgramMode{
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    width: 190px;
+    left: 1050px;
+    top: 900px;
+    padding: 10px;
+    font-size: 18px;
+    position: absolute;
+    
+}
+
+#nameProgram{
+    background-color: rgb(78, 78, 78);
+    color: #ffffff;
+    width: 190px;
+    left: 1050px;
+    top: 935px;
+    padding: 10px;
+    font-size: 18px;
+    position: absolute;
+
+}
