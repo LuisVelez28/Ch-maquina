@@ -1,5 +1,5 @@
 body {
-    background-color: #5f3e12;
+    background-color: #1B262C;
 }
 
 .imagenes{
@@ -9,30 +9,31 @@ body {
 
 #cpuImagen{
     position: absolute;
-    width: 600px;
-    height: 300px;
+    top: 10px;
+    width: 400px;
+    height: 200px;
     left: 0px;
 
 }
 
 #monitorImagen{
-    width: 600px;
-    left: 635px;
+    width: 350px;
+    left: 450px;
     position: absolute;
 }
 
 #impresoraImagen{
-    width: 500px;
-    top: 450px;
-    left: 630px;
+    width: 300px;
+    top: 300px;
+    left: 450px;
     position: absolute;  
 }
 
 #text{
     position: relative;
-    background-color: #bae5f0e3;
+    background-color: #0F4C75;
     color: #030704;
-    font-size: 30px;
+    font-size: 12px;
     left: 0px;
     top: 10px;
 } 
@@ -44,11 +45,11 @@ body {
     overflow-x:auto;
     white-space: nowrap;
     overflow-y: auto;
-    background-color: #ffffff;
-    width: 300px;
-    left: 1250px;
-    height: 900px;
-    font-size: 18px;
+    background-color: #3282B8;
+    width: 200px;
+    left: 850px;
+    height: 550px;
+    font-size: 12px;
     position: absolute;
     
 }
@@ -72,12 +73,12 @@ body {
     overflow-x:auto;
     white-space: nowrap;
     overflow-y: auto;
-    background-color: #ffffff;
-    width: 300px;
-    height: 600px;
-    top: 420px;
+    background-color: #3282B8;
+    width: 200px;
+    height: 350px;
+    top: 250px;
     left: 0px;
-    font-size: 16px;
+    font-size: 12px;
     position: absolute;
 }
 
@@ -98,14 +99,14 @@ body {
 
 
 #cardVariables{
-    background-color: #ffffff;
+    background-color: #3282B8;
     overflow-x:auto;
     white-space: nowrap;
-    width: 300px;
-    height: 300px;
-    left: 300px;
-    top: 420px;
-    font-size: 20px;
+    width: 200px;
+    height: 170px;
+    left: 200px;
+    top: 250px;
+    font-size: 12px;
     position: absolute;
 }
 
@@ -125,14 +126,14 @@ body {
 }
 
 #cardEtiquetas{
-    background-color: #ffffff;
+    background-color: #3282B8;
     overflow-x:auto;
     white-space: nowrap;
-    width: 300px;
-    left: 300px;
-    height: 300px;
-    top: 720px;
-    font-size: 20px;
+    width: 200px;
+    left: 200px;
+    height: 180px;
+    top: 420px;
+    font-size: 12px;
     position: absolute;
 }
 
@@ -155,11 +156,10 @@ body {
     background-color: #0a0101fd;
     overflow-x: auto;
     white-space: nowrap;
-    font-size: 18px;
-    top: 120px;
-    left: 652px;
-    width: 565px;
-    height: 320px;
+    top: 50px;
+    left: 460px;
+    width: 330px;
+    height: 190px;
     position: absolute;
 }
 
@@ -183,10 +183,10 @@ body {
     overflow-x: auto;
     white-space: nowrap;
     font-size: 18px;
-    top: 700px;
-    left: 700px;
-    width: 340px;
-    height: 320px;
+    top: 440px;
+    left: 500px;
+    width: 190px;
+    height: 150px;
     position: absolute;
 }
 
@@ -210,11 +210,11 @@ body {
 #textProgramMode{
     background-color: rgb(0, 0, 0);
     color: #ffffff;
-    width: 190px;
-    left: 1050px;
-    top: 900px;
+    width: 100px;
+    left: 730px;
+    top: 500px;
     padding: 10px;
-    font-size: 18px;
+    font-size: 12px;
     position: absolute;
     
 }
@@ -222,11 +222,53 @@ body {
 #nameProgram{
     background-color: rgb(78, 78, 78);
     color: #ffffff;
-    width: 190px;
-    left: 1050px;
-    top: 935px;
+    width: 100px;
+    left: 730px;
+    top: 530px;
     padding: 10px;
-    font-size: 18px;
+    font-size: 12px;
     position: absolute;
 
+}
+#proceso{
+    font-size: 14px;
+    height: 70px;
+    position: absolute;
+}
+
+#cardProcesos{
+    width: 600px;
+    height: 350px;
+    left: 1050px;
+    top: 50px;
+    position: absolute;
+}
+
+#cardProcesosEnEspera{
+    background-color: #3282B8;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 340px;
+    height: 290px;
+    left: 1060px;
+    top: 300px;
+    font-size: 14px;
+    outline: solid 2px #4a4a4a;
+    outline-offset: 2px;
+    position: absolute;
+}
+
+#cardProcesosEnEspera::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+}
+
+#cardProcesosEnEspera::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.409);
+    border-radius: 10px;
+}
+
+#cardProcesosEnEspera::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
 }

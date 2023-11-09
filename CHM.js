@@ -1,4 +1,3 @@
-// 
 M.AutoInit();
 
 //lista de nemónicos para el procesador
@@ -14,13 +13,18 @@ var diccionarioProcesos = {};
 var idProceso = 1;
 var index = 0;
 var intervaloID = 0;
-var modoPasoAPaso = false;
 var documento=[];
 var URLactual=[];
 var proceso=[];
 var contador=0;
 var pasoapaso=false;
 var indicador=1;
+var contadorProcesos=0;
+var log = [];
+var terminoProceso = true;
+var secuencia = 0;
+var tiempoRestante=0;
+var quantum=1;
 
 //Rango de memoria y valor actual
 const sliderM = document.getElementById("memoryRange");
@@ -35,7 +39,7 @@ const botonEjecutarAuto=document.getElementById("btnAuto");
 const botonEjecutarPasoAPaso=document.getElementById("btnPasoAPaso");
 const botonPausar=document.getElementById("btnPausar");
 const botonCargar=document.getElementById("btnCargar");
-//
+// asignación de botones y funcion para ejecutar el programa en los dos modos diferentes
 botonEjecutarAuto.addEventListener("click", function(){
     if(asignado){
         botonEjecutarAuto.setAttribute("disabled", "true"); 
@@ -50,7 +54,6 @@ botonPausar.addEventListener("click", function(){
     //activar boton ejecutar
     ventanaPausar();
 });
-
 // Mostrar el valor actual del slider cuando se mueve
 valorM.innerText = sliderM.value;
 sliderM.addEventListener("input", function() {
@@ -63,12 +66,16 @@ valorK.innerText = sliderK.value;
 sliderK.addEventListener("input", function() {
     valorK.innerText = sliderK.value;
 });
-
+//Mostrar el valor de quantum cuando se mueve
+const sliderQ = document.getElementById("quantumRange");
+const valorQ = document.getElementById("quantumValor");
+valorQ.innerText = sliderQ.value;
+sliderQ.addEventListener("input", function() {
+    valorQ.innerText = sliderQ.value;
+});
 //evento de cargar archivo
 const cargar=document.getElementById("fileInput");
-
 ///---------------------------------------------------------------Funciones--------------------------------------------------------------
-
 cargar.addEventListener("change", function(){
     // leer el archivo
     const archivo = new FileReader();
@@ -205,7 +212,6 @@ function leerArchivo(archivo){
                                 sintaxisError = true;
                             }else{
                                 //asignando dos valores a cada clave, la linea del documento y el valor de la clave
-                                //diccionarioEtiquetas[words[1]] =[ (sizeDocumento+1), apuntador] ;
                                 diccionarioEtiquetas[words[1]] = [(sizeDocumento+1), apuntador];
                                 apuntadorEtiqueta.push(apuntador);
                                 lineaEtiqueta.push(sizeDocumento+1);
@@ -299,6 +305,8 @@ function leerArchivo(archivo){
             }
         } else {
             //si no hay errores, se ejecuta el programa
+            contadorProcesos++;
+            //variables de proceso
             const variablesProceso = {};
             //etiquetas
             const etiquetasProceso = {};
@@ -313,41 +321,59 @@ function leerArchivo(archivo){
                 //quitar los valores del archivo a la variable de tamaño general 
                 sizeDocumentos-=sizeArchivoYVariables;
             }else{
-                //desabilitar sliders de rangos
-                // sliderM.disabled = true;
-                // sliderK.disabled = true;
-                // //asignar valores al kernel
-                // asignado = true;
-                // if(primerDocumento==true){
-                //     llenarMemoria();
-                //     memoria[0] = acumulador;
-                //     for (let i = 1; i <= parseInt(sliderK.value); i++) {
-                //         memoria[i] = "--CHSOS V2023--";
-                //     }
-                //     primerDocumento=false;
-                // }
                 //leer archivo
                 const archivo = new FileReader();
-                documento.push(document.getElementById("fileInput").files[0].name);
                 //saber la posicion vacia en memoria
                 let j=0;
+                //variables de proceso 
+                let inicio = 0;
+                let fin = 0;
+                let rafaga = 0;
+                let tiempoDeLlegada = 0;
+                let tiempoDeEjecucion = 0;
+                let prioridad = 0;
+                let nombreProceso = "";
+                nombreProceso=document.getElementById("fileInput").files[0].name;
                 if(primerDocumento==true){
-                    console.log("primer documento");
                     contador = (parseInt(sliderK.value)+1);
+                }
+                if(proceso.length===0){
+                    tiempoDeLlegada = 0;
+                }else{
+                    let i = proceso.length-1;
+                    tiempoDeLlegada += (parseInt(proceso[i][proceso[i].length-4]) + parseInt(sizeDocumento / 4));
                 }
                 j=contador;
                 //variable para saber la posicion a la que apunta la etiqueta al sumarla con el valor que esté en el diccionario de etiqueta
                 let p = contador-1;
+                const procesos = [];
                 archivo.readAsText(document.getElementById("fileInput").files[0]);
                 archivo.onload = function() {
                     //separar por lineas y guardar en un array
                     const lines = archivo.result.split('\n');
+                    let aux=0;
                     for ( i = 0 ; i < lines.length; i++) {
                         const line = lines[i];
                         const words = line.split(" ");
-                        //mostrar archivo
+                        //mostrar archivo en pantalla 
                         if (!(words[0] == "\r" || words[0] == "\n" || words[0] == "\r\n" || words[0] == "\n\r" || words[0] == "" || (words[0].substring(0, 2) === "//"))) {
-                            proceso.push(line.toString());
+                            if ((words[0] != "nueva" && words[0]!="etiqueta" && words[0]!="retorne" && words[0]!="retorne\r")) {
+                                rafaga++;
+                            }
+                            if ((words[0] != "lea" && words[0]!="muestre" && words[0]!="imprima")){
+                                tiempoDeEjecucion++;
+                            }else{
+                                const numeroAleatorio = Math.floor(Math.random() * 9) + 1;
+                                tiempoDeEjecucion+=numeroAleatorio;
+                               
+                            } 
+                            if (words[0] === "retorne" || words[0]==="retorne\r") {
+                                fin = j;
+                            }     
+                            if (aux === 0) {
+                                inicio = j;
+                                aux++;
+                            }
                             memoria[j] = line;
                             //si la palabra es un salto de linea o comentario
                             document.getElementById("readFile").insertAdjacentHTML('beforeend', '<p>'+ (`${j}`.padStart(4, "0"))+" "+ line + '</p>'); 
@@ -357,7 +383,7 @@ function leerArchivo(archivo){
                     //mostrar variables en el card           
                     Object.entries(diccionarioVariables).forEach(([key, valor]) => {
                         memoria[j] = valor;
-                        proceso.push((valor.toString()));
+                        // procesos.push((j+" "+valor.toString()));
                         variablesProceso[key] = j;
                         document.getElementById("readVariables").insertAdjacentHTML('beforeend', '<p>'+ (`${j}`.padStart(4, "0"))+" "+(`${idDocumento}`.padStart(4, "0")) + key + '</p>');
                         j++;
@@ -369,12 +395,25 @@ function leerArchivo(archivo){
                         etiquetasProceso[key] = posicion;
                         document.getElementById("readEtiquetas").insertAdjacentHTML('beforeend', '<p>'+ (`${posicion}`.padStart(4, "0"))+" "+(`${idDocumento}`.padStart(4, "0"))+ key + '</p>');
                     });
+                    procesos.push(inicio);
+                    procesos.push(nombreProceso);
+                    procesos.push(contadorProcesos);
+                    procesos.push(0);
+                    procesos.push(rafaga);
+                    procesos.push(tiempoDeLlegada);
+                    procesos.push(tiempoDeEjecucion);
+                    prioridad = parseInt(prompt("Ingrese la prioridad del proceso (1 a 99)"));
+                    if (prioridad == null || prioridad == "" || isNaN(prioridad) || prioridad < 1 || prioridad > 99) {
+                        alert("Error en el valor de prioridad, se asignará 50");
+                        prioridad = 50;
+                    }
+                    procesos.push(prioridad);
+                    procesos.push(fin);
                 }
                 //número de documentos leídos
                 idDocumento++;
                 //guardar en el diccionario de procesos
                 diccionarioProcesos[idDocumento] = [variablesProceso, etiquetasProceso];
-                console.log(diccionarioProcesos);
                 index=parseInt(sliderK.value)+1;
                 sliderM.disabled = true;
                 sliderK.disabled = true;
@@ -386,10 +425,9 @@ function leerArchivo(archivo){
                     let j = 0;
                     for (let i = 1; i < memoria.length; i++) {
                         if (i<=parseInt(sliderK.value)){
-                            memoria[i] = "--Ch-Operativo 2023--";
+                            memoria[i] = "--CHSOS V2023--";
                         }else{
                             if (j<proceso.length){
-                                console.log(proceso[j]);
                                 memoria[i] = proceso[j];
                                 j++;
                             }
@@ -398,16 +436,16 @@ function leerArchivo(archivo){
                     indicador=parseInt(sliderK.value)+1;
                     primerDocumento=false;
                 }
-                
+            
+                proceso.push(procesos);
+                contador+=sizeDocumentos;
+                sizeDocumento=0;
+                sizeDocumentos=0;
             }
-            contador+=sizeDocumentos;
-            sizeDocumento=0;
-            sizeDocumentos=0;
         }    
     };
     
 }
-
 //funcion para mostrar la memoria 
 function mostrarMemoria() {
     //limpiar memoria
@@ -462,17 +500,16 @@ function quitarSlash(cadena){
 }
 //funcion para ejecutar las instrucciones de la memoria
 function ejecutar(i){
-    //mostrar nombre de programa en el card  
-    if(documento.length >= idProceso){
-        document.getElementById("programName").innerHTML= documento[idProceso-1];
-    }
-    try{ 
+    // //mostrar nombre de programa en el card
+    document.getElementById("programName").innerHTML= proceso[0][proceso[0].length-8];
+    idProceso=proceso[0][proceso[0].length-7];
+    try{
         try{
             let line = memoria[i].split(" ");
             if ((line.length >= 2)){
                 if (line[0] === "retorne" || line[0] === "retorne\r"){
-                    idProceso++;
                     memoria[0] = 0;
+                    proceso[0][proceso[0].length-6]=memoria[0];
                     //salto de linea
                     document.getElementById("screen").innerHTML+= "<br>";
                 }
@@ -482,8 +519,8 @@ function ejecutar(i){
                 //ejecutar la instruccion
                 i=accion(memoria[i],idProceso,i);
             }else if(line[0]==="retorne" || line[0]==="retorne\r"){
-                idProceso++;
                 memoria[0] = 0;
+                proceso[0][proceso[0].length-6]=memoria[0];
                 document.getElementById("instructionLine").innerHTML = (`${i}`.padStart(4, "0")+"-"+ memoria[i]);
                 //mostrar acumulador en el card
                 document.getElementById("acumuladorValor").innerHTML = memoria[0];
@@ -503,10 +540,28 @@ function ejecutar(i){
 function accion(linea, idDocumento,i){
     let variable = "";
     let posicion = 0;
+    let instruccion ="";
     try{
         let operacion = linea.split(" ");
         variable = quitarSlash(operacion[1]);
-        posicion = diccionarioProcesos[idDocumento][0][variable];
+        instruccion = operacion[0];
+        posicion = diccionarioProcesos[idDocumento][0][variable];       
+        // if ((instruccion != "nueva" && instruccion !="etiqueta")){ 
+        //     if(secuencia<proceso[0][0]) {
+        //         secuencia=proceso[0][0];
+        //         proceso[0][proceso[0].length-5]--;
+        //     }else{
+        //         proceso[0][proceso[0].length-5]+=(secuencia-proceso[0][0]);
+        //         secuencia=proceso[0][0];
+        //     }
+        // }
+        if(secuencia<proceso[0][0]) {
+            secuencia=proceso[0][0];    
+            proceso[0][proceso[0].length-3]--;
+        }else{
+            proceso[0][proceso[0].length-3]+=(secuencia-proceso[0][0]);
+            secuencia=proceso[0][0];
+        }
     }catch(error){
         return i;
     }
@@ -514,6 +569,7 @@ function accion(linea, idDocumento,i){
     if (operacion[0]==="cargue"){
         //cargue
         memoria[0] = memoria[posicion];
+        proceso[0][proceso[0].length-6] = memoria[0];
         return i;
     }else if(operacion[0]==="almacene"){
         //almacene
@@ -529,8 +585,10 @@ function accion(linea, idDocumento,i){
         let cadena2 = memoria[0].toString();
         if (cadena.includes(".") || cadena2.includes(".")){
             memoria[0] = parseFloat(memoria[0]) + parseFloat(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }else{
             memoria[0] = parseInt(memoria[0]) + parseInt(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }
         return i;
     }else if(operacion[0]==="reste"){
@@ -539,8 +597,10 @@ function accion(linea, idDocumento,i){
         let cadena2 = memoria[0].toString();
         if (cadena.includes(".") || cadena2.includes(".")){
             memoria[0] = parseFloat(memoria[0]) - parseFloat(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }else{
             memoria[0] = parseInt(memoria[0]) - parseInt(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }
         return i;
     }else if(operacion[0]==="multiplique"){
@@ -549,8 +609,10 @@ function accion(linea, idDocumento,i){
         let cadena2 = memoria[0].toString();
         if (cadena.includes(".") || cadena2.includes(".")){
             memoria[0] = parseFloat(memoria[0]) * parseFloat(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }else{
             memoria[0] = parseInt(memoria[0]) * parseInt(memoria[posicion]);
+            proceso[0][proceso[0].length-6]=memoria[0];
         }
         return i;
     }else if(operacion[0]==="divida"){
@@ -562,8 +624,10 @@ function accion(linea, idDocumento,i){
                 let cadena2 = memoria[0].toString();
                 if (cadena.includes(".") || cadena2.includes(".")){
                     memoria[0] = parseFloat(memoria[0]) / parseFloat(memoria[posicion]);
+                    proceso[0][proceso[0].length-6]=memoria[0];
                 }else{
                     memoria[0] = parseInt(memoria[0]) / parseInt(memoria[posicion]);
+                    proceso[0][proceso[0].length-6]=memoria[0];
                 }
             }
         } catch (error) {
@@ -573,24 +637,29 @@ function accion(linea, idDocumento,i){
     }else if(operacion[0]==="potencia"){
         //potencia
         memoria[0] = Math.pow(memoria[0],memoria[posicion]);
+        proceso[0][proceso[0].length-6]=memoria[0];
         return i;
     }else if(operacion[0]==="modulo"){
         //modulo
         memoria[0] = parseInt(memoria[0]) % parseInt(memoria[posicion]);
+        proceso[0][proceso[0].length-6]=memoria[0];
         return i;
     }else if(operacion[0]==="concatene"){
         //concatene
         memoria[0] = memoria[0] + memoria[posicion];
+        proceso[0][proceso[0].length-6]=memoria[0];
         return i;
     }else if(operacion[0]==="elimine"){
         //elimine
         memoria[0] = memoria[0].replaceAll(memoria[posicion],"");
+        proceso[0][proceso[0].length-6]=memoria[0];
         return i;
     }else if(operacion[0] === "extraiga"){
         //extraiga
         let extraer = memoria[diccionarioProcesos[idDocumento][0][variable]];
         let subcadena = memoria[0].substring(0,extraer);
         memoria[0] = subcadena;
+        proceso[0][proceso[0].length-6]=memoria[0];
         return i;
     }else if (operacion[0]==="muestre"){
         //muestre
@@ -625,11 +694,10 @@ function accion(linea, idDocumento,i){
         //vayasi
         if(memoria[0] < 0){
             let posicion = diccionarioProcesos[idDocumento][1][quitarSlash(operacion[2])];
-            console.log(posicion);
             i=posicion-1;
             return i;
         }else if(memoria[0] > 0){
-            let posicion = diccionarioProcesos[idDocumento][1][operacion[1]];
+            let posicion = diccionarioProcesos[idDocumento][1][quitarSlash(operacion[1])];
             i=posicion-1;
             return i;
         }
@@ -678,7 +746,32 @@ function accion(linea, idDocumento,i){
         return i;
     }
 }
-
+//función para cargar el archivo a editar
+document.getElementById("fileEditor").addEventListener("change", function(){
+    let file = document.getElementById("fileEditor").files[0];
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function(){
+        document.getElementById("editorFile").value = reader.result;
+    }
+});
+//funcion para guardar el archivo hecho 
+function guardarFile() {
+    // Obtener el contenido del textarea
+    const texto = document.getElementById('editorFile').value;
+    // Crear un objeto Blob con el contenido del textarea
+    const blob = new Blob([texto], {type: "text/plain"});
+    // Crear un objeto URL para el blob
+    const url = URL.createObjectURL(blob);
+    // Crear un enlace para descargar el archivo
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.download = 'nuevo-programa.CH';
+    // Simular un click en el enlace para descargar el archivo
+    enlace.click();
+    // Liberar el objeto URL
+    URL.revokeObjectURL(url);
+}
 // ventana para confirmar si se desea continurar en modo paso a paso
 function ventanaContinuar(){
     if(confirm("¿Desea seguir en modo paso a paso?")){
@@ -691,29 +784,151 @@ function ventanaContinuar(){
 function ventanaPausar(){
     alert("Se ha pausado la ejecución");
 }
-
-// función para inicializar la ejecución de los procesos
-async function iniciar() {   
-    //cambiar modo del pograma
-    document.getElementById("programMode").innerHTML = "Usuario";
-    for (let i = 0; i < (memoria.length); i++) {
-        if (indicador<=contador && indicador<memoria.length){
-            //ejecutar proceso
-            console.log(indicador,memoria[indicador]);
-            indicador=ejecutar(indicador);
-            mostrarMemoria();
-            indicador++;  
-        }else{
-            //habilitar boton ejecutar
-            botonEjecutarAuto.removeAttribute("disabled");
-            i=memoria.length; 
-        }
-        if (pasoapaso==true){
-            ventanaContinuar();
-        }
-        await new Promise(resolve => setTimeout(resolve, 700));
+//definir el valor seleccionado en el select
+function seleccionarProceso(){
+    let select = document.getElementById("procesoElegido");
+    let valor = select.value;
+    return valor;
+}
+// función para saber la línea en la que se encuentra el proceso que se está ejecutando
+function indicadorProcesos(){
+    if (proceso.length>0){
+        return proceso[0][0];
     }
 }
+// función para saber si el proceso ya terminó y eliminarlo de la lista de procesos
+function eliminarProceso(){
+    if (proceso[0][0]===proceso[0][proceso[0].length-1]){
+        secuencia=0;
+        terminoProceso=true;
+        proceso.shift();
+    }
+}
+// función para cambiar el tiempo restante con el valor de la ráfaga en el proceso que esté en ejecución 
+function Cambio(){
+    let temp=proceso[0][proceso[0].length-3];
+    proceso[0][proceso[0].length-3]=proceso[0][proceso[0].length-5];
+    proceso[0][proceso[0].length-5]=temp;
+}
+// función para saber que algoritmo de planificación se va a usar 
+function algoritmosProceso(){
+    let select = seleccionarProceso();
+    if(select==="2"){
+        roundRobin();
+        quantum++;
+    }else if (select==="3"){
+        if (terminoProceso===true){
+            proceso.sort(compararRafaga);       
+        }
+    }else if(select==="4"){
+        compararRafagaTiempo(proceso, tiempoRestante);
+    }else if(select==="5"){
+        if(terminoProceso===true){
+            proceso.sort(compararPrioridad);
+            envejecimiento();
+        }
+    }else if(select==="6"){
+        proceso.sort(compararPrioridad);
+        envejecimiento();
+    }
+}
+// función para comparar el tiempo de ejecución de los procesos
+function compararTiempoEjecucion(a,b){
+    return a[a.length-3] - b[b.length-3];
+}
+// función para comparar la rafaga de los procesos
+function compararRafaga(a,b){
+    if (a[a.length-5] === b[b.length-5]) {
+        return a[a.length-4] - b[b.length-4];
+    } else {
+        return a[a.length-5] - b[b.length-5];
+    }
+}
+// función para comparar la rafaga de los procesos con el tiempo de ejecución restante del proceso en ejecución
+function compararRafagaTiempo(proceso, tiempo) {
+    // Encuentra el índice del vector con la posición 5 de menor valor que tiempo
+    let menorIndice = 0;
+    for (let i = 1; i < proceso.length; i++) {
+      if (proceso[i][proceso[i].length-5] < proceso[menorIndice][proceso[i].length-5] && proceso[i][proceso[i].length-5] < tiempo) {
+        menorIndice = i;
+      }
+    }
+  
+    // Intercambia el vector en la posición 0 con el vector en el índice encontrado
+    if (menorIndice !== 0) {
+      const temp = proceso[0];
+      proceso[0] = proceso[menorIndice];
+      proceso[menorIndice] = temp;
+    }
+  
+    // Retorna el vector de vectores actualizado
+    return proceso;
+}
+// función para comparar la prioridad de los procesos y ordenarlos de mayor a menor
+function compararPrioridad(a,b){
+    return b[a.length-2] - a[b.length-2];
+}
+// función para aumentar el tiempo de espera de los procesos y evitar la innanición
+function envejecimiento(){
+    for (let i = 1; i < proceso.length; i++) {
+        if(proceso[i][proceso[i].length-2]<99){
+            proceso[i][proceso[i].length-2]++;
+        }
+    }
+}
+// función para ejecutar el algoritmo de round robin 
+function roundRobin(){
+    //traer el valor del quantum
+    if (quantum===parseInt(sliderQ.value)){
+        desplazarIzquierda(proceso);
+        quantum=0;
+    }
+}
+// función para desplazar el proceso a la izquierda los procesos del vector proceso cuando se cumple el quantum
+function desplazarIzquierda(proceso) {
+    const primero = proceso.shift();
+    proceso.push(primero);
+}
+// función para inicializar la ejecución de los procesos 
+async function iniciar() {   
+    document.getElementById("programMode").innerHTML = "Usuario";  //cambiar modo de ejecución a usuario 
+    sliderQ.disabled=true;  //deshabilitar slider de quantum
+    for (let i = 0; i < (memoria.length); i++) {
+        if (proceso.length>0){
+            tiempoRestante=proceso[0][proceso[0].length-3];  
+            algoritmosProceso();   
+            terminoProceso=false;   
+            memoria[0]=proceso[0][proceso[0].length-6];     //acumulador de proceso 
+            indicador=indicadorProcesos();    //obtener indicador de proceso de la lista de procesos
+            indicador=ejecutar(indicador);   //ejecutar proceso y obtener indicador
+            indicador++;   //aumentar indicador de proceso
+            proceso[0][0]=indicador;   //asignar indicador a la primera posición del proceso
+            eliminarProceso(); 
+            mostrarMemoria();
+            mostrarProcesosEspera(); 
+        }else{
+            botonEjecutarAuto.removeAttribute("disabled");  //habilitar boton de ejecución automatica
+            sliderQ.disabled=false;  //deshabilitar slider de quantum
+            document.getElementById("procesosEspera").innerHTML = "";
+            i=memoria.length;
 
-
+        }
+        if (pasoapaso==true){
+            ventanaContinuar();     //ventana para confirmar si se desea continuar en modo paso a paso
+        }
+        // document.getElementById("procesosEspera").innerHTML = ""
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    
+}
+// funcion para mostrar la lista de procesos en espera 
+function mostrarProcesosEspera(){
+    let procesosEspera="";
+    if (proceso.length>1){
+        for (let i = 1; i < proceso.length; i++) {
+            procesosEspera=procesosEspera+"<br>"+proceso[i][1];
+        }
+    }
+    document.getElementById("procesosEspera").innerHTML = "<p>"+procesosEspera+"</p>";
+}
 

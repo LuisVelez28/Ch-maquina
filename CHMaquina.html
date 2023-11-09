@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHMáquina</title>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHMáquina</title>
 </head>
+
 <body>
   <nav class="nav-extended white">
     <div class="nav-content grey">
-      <div class="nav-wrapper">
-      </div>
       <a href="#" class="brand-logo right" id="navText">CHMÁQUINA Luis Vélez</a>
-      <ul class="tabs tabs-transparent">  
+      <ul class="tabs tabs-transparent">
         <li class="tab">
           <div class="file-field input-field">
             <a class="btn black" id="btnCargar">
-              <span >Cargar</span>
+              <span>Cargar</span>
               <input type="file" id="fileInput">
               <i class="material-icons left">file_upload</i>
             </a>
           </div>
         </li>
-        <li class="tab" ><a class="waves-effect waves-light black btn" id="btnAuto"><i class="material-icons left">play_arrow</i>Ejecutar</a></li>
-        <li class="tab"><a class="waves-effect waves-light black btn" id="btnPasoAPaso"><i class="material-icons left">directions_walk</i>Paso a paso</a></li>
-        <li class="tab"><a class="waves-effect waves-light black btn" id="btnPausar"><i class="material-icons left">pause</i>Pausa</a></li>
-        <li class="tab"><a class="waves-effect waves-light black btn" onclick="mostrarMemoria()"><i class="material-icons left">list</i>Muestra de memoria</a></li>
+        <li class="tab"><a class="waves-effect waves-light black btn" id="btnAuto"><i
+              class="material-icons left">play_arrow</i>Ejecutar</a></li>
+        <li class="tab"><a class="waves-effect waves-light black btn" id="btnPasoAPaso"><i
+              class="material-icons left">directions_walk</i>Paso a paso</a></li>
+        <li class="tab"><a class="waves-effect waves-light black btn" id="btnPausar"><i
+              class="material-icons left">pause</i>Pausa</a></li>
+        <li class="tab"><a class="waves-effect waves-light black btn" onclick="mostrarMemoria()"><i
+              class="material-icons left">list</i>Muestra de memoria</a></li>
       </ul>
     </div>
   </nav>
@@ -45,16 +50,12 @@
       <h6 id="nameProgram" class="center"><span id="programName"></span></h6>
       <div class="col s3.8 white-text">
         <form action="#">
-          <p class="range-field">
-            <h6 id="text">Memoria : <span id="memoryValor"></span></h6>
-            <input type="range" id="memoryRange" min="3" max="9999" value="100" />
-          </p>
+          <h6 id="text">Memoria : <span id="memoryValor"></span></h6>
+          <input type="range" id="memoryRange" min="3" max="9999" value="100" />
         </form>
         <form action="#">
-          <p class="range-field">
-            <h6 id="text">Kernel : <span id="kernelValor"></span></h6>
-            <input type="range" id="kernelRange" min="1" max="9998" value="79" />
-          </p>
+          <h6 id="text">Kernel : <span id="kernelValor"></span></h6>
+          <input type="range" id="kernelRange" min="1" max="9998" value="79" />
         </form>
         <h6 id="text">Acumulador: <span id="acumuladorValor"></span></h6>
         <h6 id="text">Instrucción: <span id="instructionLine"></span></h6>
@@ -81,24 +82,57 @@
       <div class="col s2">
         <div class="card" id="cardVariables">
           <div class="card-content black-text">
-            VARIABLES<br><p id="readVariables" class="black-text"></p>
+            VARIABLES<br>
+            <p id="readVariables" class="black-text"></p>
           </div>
         </div>
         <div class="card" id="cardEtiquetas">
           <div class="card-content black-text ">
-            ETIQUETAS<br><p id="readEtiquetas" class="black-text"></p>
+            ETIQUETAS<br>
+            <p id="readEtiquetas" class="black-text"></p>
           </div>
         </div>
       </div>
     </div>
-    <div class="col s2" >
+    <div class="col s2">
       <div class="card" id="cardMuestraMemoria">
         <div class="card-content black-text">
-          MEMORIA<br><p id="readMuestraMemoria" class="black-text"></p>
+          MEMORIA<br>
+          <p id="readMuestraMemoria" class="black-text"></p>
         </div>
       </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-  <script src="CHM.js"></script>
+    <div class="col s12 " id="cardProcesos">
+      <div class="input-field grey lighten-2 col 4">
+        <select id="procesoElegido">
+          <option value="1">FCFS</option>
+          <option value="2" selected>Round Robin</option>
+          <option value="3">SJF(NE)</option>
+          <option value="4">SJF(E)</option>
+          <option value="5">Prioridad(NE)</option>
+          <option value="6">Prioridad(E)</option>
+        </select>
+      </div>
+      <div class="col s3">
+        <form action="#">
+          <p class="range-field">
+          <h6 id="text">Quantum : <span id="quantumValor"></span></h6>
+          <input type="range" id="quantumRange" min="1" max="15" value="5" />
+          </p>
+      </div>
+    </div>
+    <div class="card" id="cardProcesosEnEspera">
+      <div class="card-content white-text center">
+        <span class="card-title">Procesos en espera</span>
+        <hr>
+        <p id="procesosEspera" class="white-text"></p>
+      </div>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script>
+    <script src="CHM.js"></script>
 </body>
+
 </html>
